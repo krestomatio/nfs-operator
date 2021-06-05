@@ -1,0 +1,11 @@
+apiVersion: kpt.dev/v1alpha1
+kind: Kptfile
+metadata:
+  name: nfs
+upstream:
+  type: git
+  git:
+    commit: e8fd65f0886be00978cae66d56cdb3d32dc2de26
+    repo: https://github.com/rook/rook
+    directory: cluster/examples/kubernetes/nfs
+    ref: v1.6.2

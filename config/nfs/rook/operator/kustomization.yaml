@@ -1,0 +1,12 @@
+# Install nfs provider operator with rook nfs server permissions
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- server/upstream/common.yaml
+- server/upstream/operator.yaml
+# Create Pod Security Policies (Recommended)
+# - server/upstream/psp.yaml
+# Deploy NFS Admission Webhook (Optional). Requires cert-manager
+# - server/upstream/webhook.yaml
+# Create Openshift Security Context Constraints (Optional)
+# - server/upstream/scc.yaml

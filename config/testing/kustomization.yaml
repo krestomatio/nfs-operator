@@ -1,7 +1,7 @@
 # Adds namespace to all resources.
-namespace: osdk-test
+namespace: nfs-test
 
-namePrefix: osdk-
+namePrefix: nfs-
 
 # Labels to add to all resources and selectors.
 #commonLabels:

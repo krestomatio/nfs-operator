@@ -1,0 +1,5 @@
+# Install nfs provider operator with rook nfs server permissions
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- upstream/rbac.yaml
