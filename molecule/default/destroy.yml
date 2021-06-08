@@ -7,18 +7,27 @@
     - community.kubernetes
 
   tasks:
+    - import_tasks: kustomize-prepare.yml
+
     - import_tasks: kustomize.yml
       vars:
         state: absent
 
-    - name: Destroy Namespace
-      k8s:
-        api_version: v1
-        kind: Namespace
-        name: '{{ namespace }}'
-        state: absent
-
     - name: Unset pull policy
-      command: '{{ kustomize }} edit remove patch pull_policy/{{ operator_pull_policy }}.yaml'
+      command: '{{ kustomize }} edit remove patch --path pull_policy/{{ operator_pull_policy }}.yaml'
       args:
         chdir: '{{ config_dir }}/testing'
+
+    - name: Unset testing image
+      command: '{{ kustomize }} edit set image testing=testing-operator'
+      args:
+        chdir: '{{ config_dir }}/testing'
+
+    - name: Unset testing namespace
+      loop:
+        - "{{ config_dir }}/testing/nfs/operator"
+        - "{{ config_dir }}/testing/nfs/server"
+        - "{{ config_dir }}/testing"
+      command: '{{ kustomize }} edit set namespace nfs-test'
+      args:
+        chdir: '{{ item }}'

@@ -3,5 +3,3 @@ kind: Kustomization
 namespace: nfs-test
 resources:
 - ../../../nfs/rook/operator
-generatorOptions:
- disableNameSuffixHash: true
