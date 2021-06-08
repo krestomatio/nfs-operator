@@ -1,9 +1,72 @@
-# VERSION defines the project version for the bundle.
-# Update this value when you upgrade the version of your project.
-# To re-generate a bundle for another specific version without changing the standard setup, you can:
-# - use the VERSION as arg of the bundle target (e.g make bundle VERSION=0.0.2)
-# - use environment variables to overwrite this value (e.g export VERSION=0.0.2)
+CONTAINER_BUILDER ?= docker
+OPERATOR_NAME ?= nfs-operator
+REPO_NAME ?= nfs-operator
+REPO_OWNER ?= krestomatio
 VERSION ?= 0.0.1
+
+# Image
+REGISTRY ?= quay.io
+REGISTRY_PATH ?= $(REGISTRY)/$(REPO_OWNER)
+IMG_NAME ?= $(REGISTRY_PATH)/$(OPERATOR_NAME)
+IMG ?= $(IMG_NAME):$(VERSION)
+
+# requirements
+OPERATOR_VERSION ?= 1.7.2
+KUSTOMIZE_VERSION ?= 4.1.3
+OPM_VERSION ?= 1.15.1
+
+# JX
+JOB_NAME ?= pr
+PULL_NUMBER ?= 0
+BUILD_ID ?= 0
+
+# Build
+BUILD_REGISTRY_PATH ?= docker-registry.jx.krestomat.io/krestomatio
+BUILD_OPERATOR_NAME ?= $(OPERATOR_NAME)
+BUILD_IMG_NAME ?= $(BUILD_REGISTRY_PATH)/$(BUILD_OPERATOR_NAME)
+ifeq ($(JOB_NAME),release)
+BUILD_VERSION ?= $(shell git rev-parse HEAD^2 &>/dev/null && git rev-parse HEAD^2 || echo)
+else
+BUILD_VERSION ?= $(shell git rev-parse HEAD 2> /dev/null  || echo)
+endif
+
+# CI
+SKIP_MSG := skip.ci
+RUN_PIPELINE ?= $(shell git log -1 --pretty=%B | cat | grep -q "\[$(SKIP_MSG)\]" && echo || echo 1)
+ifeq ($(RUN_PIPELINE),)
+SKIP_PIPELINE = true
+$(info RUN_PIPELINE not set, skipping...)
+endif
+ifeq ($(BUILD_VERSION),)
+SKIP_PIPELINE = true
+$(info BUILD_VERSION not set, skipping...)
+endif
+ifeq ($(origin PULL_BASE_SHA),undefined)
+CHANGELOG_FROM ?= HEAD~1
+else
+CHANGELOG_FROM ?= $(PULL_BASE_SHA)
+endif
+ifeq ($(origin PULL_PULL_SHA),undefined)
+COMMITLINT_TO ?= HEAD
+else
+COMMITLINT_TO ?= $(PULL_PULL_SHA)
+endif
+
+# molecule
+MOLECULE_SEQUENCE ?= test
+MOLECULE_SCENARIO ?= default
+export OPERATOR_IMAGE ?= $(IMG)
+export TEST_OPERATOR_NAMESPACE ?= nfs-$(JOB_NAME)-$(PULL_NUMBER)-$(BUILD_ID)
+
+# skopeo
+SKOPEO_SRC_TLS ?= True
+SKOPEO_DEST_TLS ?= true
+
+# Release
+GIT_REMOTE ?= origin
+GIT_BRANCH ?= master
+GIT_ADD_FILES ?= Makefile
+CHANGELOG_FILE ?= CHANGELOG.md
 
 # CHANNELS define the bundle channels used in the bundle.
 # Add a new line here if you would like to change its default config. (E.g CHANNELS = "preview,fast,stable")
@@ -29,16 +92,13 @@ BUNDLE_METADATA_OPTS ?= $(BUNDLE_CHANNELS) $(BUNDLE_DEFAULT_CHANNEL)
 #
 # For example, running 'make bundle-build bundle-push catalog-build catalog-push' will build and push both
 # krestomat.io/nfs-operator-bundle:$VERSION and krestomat.io/nfs-operator-catalog:$VERSION.
-IMAGE_TAG_BASE ?= krestomat.io/nfs-operator
+IMAGE_TAG_BASE ?= $(IMG_NAME)
 
 # BUNDLE_IMG defines the image:tag used for the bundle.
 # You can use it as an arg. (E.g make bundle-build BUNDLE_IMG=<some-registry>/<project-name-bundle>:<tag>)
 BUNDLE_IMG ?= $(IMAGE_TAG_BASE)-bundle:v$(VERSION)
 
-# Image URL to use all building/pushing image targets
-IMG ?= controller:latest
-
-all: docker-build
+all: image-build
 
 ##@ General
 
@@ -61,11 +121,11 @@ help: ## Display this help.
 run: ansible-operator ## Run against the configured Kubernetes cluster in ~/.kube/config
 	$(ANSIBLE_OPERATOR) run
 
-docker-build: ## Build docker image with the manager.
-	docker build -t ${IMG} .
+image-build: ## Build container image with the manager.
+	$(CONTAINER_BUILDER) build . -t $(IMG)
 
-docker-push: ## Push docker image with the manager.
-	docker push ${IMG}
+image-push: ## Push container image with the manager.
+	$(CONTAINER_BUILDER) push $(IMG)
 
 ##@ Deployment
 
@@ -77,10 +137,10 @@ uninstall: kustomize ## Uninstall CRDs from the K8s cluster specified in ~/.kube
 
 deploy: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
-	$(KUSTOMIZE) build config/default | kubectl apply -f -
+	$(KUSTOMIZE) build config/nfs | kubectl apply -f -
 
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build config/default | kubectl delete -f -
+	$(KUSTOMIZE) build config/nfs | kubectl delete -f -
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/')
@@ -93,7 +153,7 @@ ifeq (,$(shell which kustomize 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p $(dir $(KUSTOMIZE)) ;\
-	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.5.4/kustomize_v3.5.4_$(OS)_$(ARCH).tar.gz | \
+	curl -sSLo - https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v$(KUSTOMIZE_VERSION)/kustomize_v$(KUSTOMIZE_VERSION)_$(OS)_$(ARCH).tar.gz | \
 	tar xzf - -C bin/ ;\
 	}
 else
@@ -109,7 +169,7 @@ ifeq (,$(shell which ansible-operator 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p $(dir $(ANSIBLE_OPERATOR)) ;\
-	curl -sSLo $(ANSIBLE_OPERATOR) https://github.com/operator-framework/operator-sdk/releases/download/v1.7.2/ansible-operator_$(OS)_$(ARCH) ;\
+	curl -sSLo $(ANSIBLE_OPERATOR) https://github.com/operator-framework/operator-sdk/releases/download/v$(OPERATOR_VERSION)/ansible-operator_$(OS)_$(ARCH) ;\
 	chmod +x $(ANSIBLE_OPERATOR) ;\
 	}
 else
@@ -126,11 +186,11 @@ bundle: kustomize ## Generate bundle manifests and metadata, then validate gener
 
 .PHONY: bundle-build
 bundle-build: ## Build the bundle image.
-	docker build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
+	$(CONTAINER_BUILDER) build -f bundle.Dockerfile -t $(BUNDLE_IMG) .
 
 .PHONY: bundle-push
 bundle-push: ## Push the bundle image.
-	$(MAKE) docker-push IMG=$(BUNDLE_IMG)
+	$(MAKE) image-push IMG=$(BUNDLE_IMG)
 
 .PHONY: opm
 OPM = ./bin/opm
@@ -140,7 +200,7 @@ ifeq (,$(shell which opm 2>/dev/null))
 	@{ \
 	set -e ;\
 	mkdir -p $(dir $(OPM)) ;\
-	curl -sSLo $(OPM) https://github.com/operator-framework/operator-registry/releases/download/v1.15.1/$(OS)-$(ARCH)-opm ;\
+	curl -sSLo $(OPM) https://github.com/operator-framework/operator-registry/releases/download/v$(OPM_VERSION)/$(OS)-$(ARCH)-opm ;\
 	chmod +x $(OPM) ;\
 	}
 else
@@ -165,9 +225,87 @@ endif
 # https://github.com/operator-framework/community-operators/blob/7f1438c/docs/packaging-operator.md#updating-your-existing-operator
 .PHONY: catalog-build
 catalog-build: opm ## Build a catalog image.
-	$(OPM) index add --container-tool docker --mode semver --tag $(CATALOG_IMG) --bundles $(BUNDLE_IMGS) $(FROM_INDEX_OPT)
+	$(OPM) index add --container-tool $(CONTAINER_BUILDER) --mode semver --tag $(CATALOG_IMG) --bundles $(BUNDLE_IMGS) $(FROM_INDEX_OPT)
 
 # Push the catalog image.
 .PHONY: catalog-push
 catalog-push: ## Push a catalog image.
-	$(MAKE) docker-push IMG=$(CATALOG_IMG)
+	$(MAKE) image-push IMG=$(CATALOG_IMG)
+
+# CI
+ifeq ($(origin SKIP_PIPELINE),undefined)
+## Pullrequest pipeline
+.PHONY: pr
+pr: IMG = $(BUILD_IMG_NAME):$(BUILD_VERSION)
+pr: image-build image-push molecule
+
+### lint
+.PHONY: lint
+lint: MOLECULE_SEQUENCE = lint
+lint: molecule
+
+### check
+.PHONY: check
+check: MOLECULE_SEQUENCE = check
+check: pr
+
+### test k8s
+.PHONY: k8s
+k8s: pr
+
+### Test with molecule
+.PHONY: molecule
+molecule:
+	molecule $(MOLECULE_SEQUENCE) -s $(MOLECULE_SCENARIO)
+
+## Release pipeline
+.PHONY: release
+release: promote git
+
+### Changelog using jx
+.PHONY: changelog
+changelog:
+ifeq (0, $(shell test -d  "charts/$(REPO_NAME)"; echo $$?))
+	sed -i "s/^version:.*/version: $(VERSION)/" charts/$(REPO_NAME)/Chart.yaml
+	sed -i "s/tag:.*/tag: $(VERSION)/" charts/$(REPO_NAME)/values.yaml
+	sed -i "s@repository:.*@repository: $(IMG_NAME)@" charts/$(REPO_NAME)/values.yaml
+	git add charts/
+else
+	echo no charts
+endif
+	jx changelog create --verbose --version=$(VERSION) --rev=$(CHANGELOG_FROM) --output-markdown=$(CHANGELOG_FILE) --update-release=false
+	git add $(CHANGELOG_FILE)
+
+### Release pipeline
+.PHONY: git
+git:
+	git add $(GIT_ADD_FILES)
+	git commit -m "chore(release): $(VERSION)" -m "[$(SKIP_MSG)]"
+	git tag v$(VERSION)
+	git push $(GIT_REMOTE) $(GIT_BRANCH) --tags
+
+### copy image using skopeo
+.PHONY: promote
+promote:
+	# full version
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(VERSION)
+	# major + minor
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION))).$(word 2,$(subst ., ,$(VERSION)))
+	# major
+	skopeo copy --src-tls-verify=$(SKOPEO_SRC_TLS) --dest-tls-verify=$(SKOPEO_DEST_TLS) docker://$(BUILD_IMG_NAME):$(BUILD_VERSION) docker://$(IMG_NAME):$(word 1,$(subst ., ,$(VERSION)))
+else
+$(info SKIP_PIPELINE set:)
+## pr
+pr:
+	$(info skipping pr...)
+
+lint:
+	$(info skipping lint...)
+
+## release
+changelog:
+	$(info skipping changelog...)
+
+release:
+	$(info skipping release...)
+endif
