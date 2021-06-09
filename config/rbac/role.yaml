@@ -11,9 +11,11 @@ rules:
       - ""
     resources:
       - secrets
+      - configmaps
       - pods
       - pods/exec
       - pods/log
+      - persistentvolumeclaims
     verbs:
       - create
       - delete
@@ -25,13 +27,8 @@ rules:
   - apiGroups:
       - apps
     resources:
-      - deployments
-      - daemonsets
-      - replicasets
       - statefulsets
     verbs:
-      - create
-      - delete
       - get
       - list
       - patch
@@ -46,6 +43,33 @@ rules:
       - servers
       - servers/status
       - servers/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for nfs rook
+  ##
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - nfs.rook.io
+    resources:
+      - nfsservers
     verbs:
       - create
       - delete
