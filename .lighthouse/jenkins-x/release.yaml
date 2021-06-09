@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  creationTimestamp: null
+  name: release
+spec:
+  pipelineSpec:
+    tasks:
+      - name: release
+        resources: {}
+        taskSpec:
+          metadata: {}
+          stepTemplate:
+            name: ''
+            env:
+              - name: VERSION_MAKEFILE
+                value: "true"
+              - name: PROJECT_TIMESTAMP
+                value: midnight
+            resources:
+              requests:
+                cpu: 400m
+                memory: 512Mi
+            workingDir: /workspace/source
+          steps:
+            - image: uses:krestomatio/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@1a6580e62be0986d18dbb1c42327231ccc378e7c
+            - image: gcr.io/jenkinsxio/jx-changelog:0.0.33
+              name: changelog
+              args:
+              - changelog
+              command:
+              - make
+            - image: quay.io/krestomatio/ansible-operator-ci
+              name: release
+              args:
+              - release
+              command:
+              - make
+  podTemplate: {}
+  serviceAccountName: tekton-bot
+  timeout: 240h0m0s
+status: {}
