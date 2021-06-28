@@ -6,18 +6,4 @@
     - operator_sdk.util
   tasks:
     - import_role:
-        name: krestomatio.k8s.v1alpha1.nfs.Server
-
-- name: nfs routines
-  hosts: "{{ pods_ready_group }}:&{{ server_container_group }}"
-  run_once: true
-  gather_facts: false
-  collections:
-    - community.kubernetes
-    - operator_sdk.util
-  tasks:
-    - name: include routines
-      when: "server_state == 'present'"
-      import_role:
-        name: krestomatio.k8s.v1alpha1.nfs.Server
-        tasks_from: nfs-routines.yml
+        name: krestomatio.k8s.v1alpha1.nfs.server
