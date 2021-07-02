@@ -3,5 +3,29 @@ kind: Server
 metadata:
   name: server-sample
 spec:
-  # Add fields here
-  foo: bar
+  # Ownership/permissions
+  ## Set export folder userid to 48
+  server_export_userid: 48
+  ## Set export folder groupid to 0
+  server_export_groupid: 0
+  ## Set export folder permissions to 775
+  server_export_permissions: 755
+
+  # Autoexpansion: if storage available is less than 20% or 'server_pvc_autoexpansion_gib', adjust PVC storage size according to 'server_pvc_autoexpansion_gib' and 'server_pvc_autoexpansion_cap_gib':
+  # * Kubernetes cluster and (NFS) Server PVC must support expansion of volumes
+  # * In older version, (NFS) Server pod may be restart when autoexpanding if Kubernetes feature gate
+  #   'ExpandInUsePersistentVolumes' is false. See:
+  #   https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
+  ## Enable autoexpansion
+  server_pvc_autoexpansion: true
+  ## Every time autoexpansion is required, increment 5 GiB
+  server_pvc_autoexpansion_gib: 5
+  ### But no more than 250 GiB
+  server_pvc_autoexpansion_cap_gib: 250
+
+  # Other
+  ## (NFS) Server PVC initial size in GiB
+  server_pvc_init_size_gib: 1
+
+  ## Storage class name to be used by this (NFS) Server
+  # server_pvc_storage_class_name: standard
