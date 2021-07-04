@@ -10,3 +10,10 @@ resources:
 # - server/upstream/webhook.yaml
 # Create Openshift Security Context Constraints (Optional)
 # - server/upstream/scc.yaml
+patches:
+- target:
+    kind: CustomResourceDefinition
+    name: nfsservers.nfs.rook.io
+  patch: |-
+    - op: remove
+      path: /status
