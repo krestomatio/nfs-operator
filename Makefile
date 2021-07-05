@@ -160,10 +160,17 @@ uninstall: kustomize ## Uninstall CRDs from the K8s cluster specified in ~/.kube
 
 deploy: kustomize ## Deploy controller to the K8s cluster specified in ~/.kube/config.
 	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
-	$(KUSTOMIZE) build config/nfs | kubectl apply -f -
+	$(KUSTOMIZE) build config/default | kubectl apply -f -
+
+deploy-rook: kustomize ## Deploy rook nfs operator to the K8s cluster specified in ~/.kube/config.
+	cd config/manager && $(KUSTOMIZE) edit set image controller=${IMG}
+	$(KUSTOMIZE) build config/rook | kubectl apply -f -
 
 undeploy: ## Undeploy controller from the K8s cluster specified in ~/.kube/config.
-	$(KUSTOMIZE) build config/nfs | kubectl delete -f -
+	$(KUSTOMIZE) build config/default | kubectl delete -f -
+
+undeploy-rook: ## Undeploy rook nfs operator from the K8s cluster specified in ~/.kube/config.
+	$(KUSTOMIZE) build config/rook | kubectl delete -f -
 
 OS := $(shell uname -s | tr '[:upper:]' '[:lower:]')
 ARCH := $(shell uname -m | sed 's/x86_64/amd64/')
