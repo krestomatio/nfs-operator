@@ -1,6 +1,6 @@
 > The Kubernetes Operator in this project is in **Alpha** version. **Use at your own risk**
 
-[NFS Operator](https://github.com/krestomatio/nfs-operator) adds three important features for an NFS in Kubernetes. It allows setting NFS export [ownership/permissions](#ownershippermissions), enables PVC [autoexpansion](#autoexpansion) and reduces the number of manual [resource definitions](#storageclass). It is based on [Rook NFS v1.6](https://github.com/rook/rook/blob/release-1.6/Documentation/nfs.md) and [Ansible Operator SDK](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/). Thus, the new features are in addition to those in Rook NFS. The extra functions it adds on top of Rook NFS are:
+[NFS Operator](https://github.com/krestomatio/nfs-operator) adds three important features for a NFS in Kubernetes. It allows setting NFS export [ownership/permissions](#ownershippermissions), enables PVC [autoexpansion](#autoexpansion) and reduces the number of manual [resource definitions](#storageclass). It is based on [Rook NFS v1.6](https://github.com/rook/rook/blob/release-1.6/Documentation/nfs.md) and [Ansible Operator SDK](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/). Thus, the new features are in addition to those in Rook NFS. The extra functions it adds on top of Rook NFS are:
 
 1. It is able to set ownership and permissions for the (NFS) Server export
 2. It is able to autoexpand/adjust the value of (NFS) Server PVC storage size
@@ -23,6 +23,12 @@ make deploy
 
 # add a nfs server cr/object
 kubectl -n rook-nfs apply -f config/samples/nfs_v1alpha1_server.yaml
+
+# follow/check nfs operator logs
+kubectl -n nfs-operator-system logs -l control-plane=controller-manager -c manager  -f
+
+# follow sample nfs server cr/object status
+kubectl -n rook-nfs get Server server-sample -o yaml -w
 ```
 
 ## Uninstall
