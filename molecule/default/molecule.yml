@@ -26,6 +26,7 @@ provisioner:
         ansible_python_interpreter: '{{ ansible_playbook_python }}'
         config_dir: ${MOLECULE_PROJECT_DIRECTORY}/config
         samples_dir: ${MOLECULE_PROJECT_DIRECTORY}/config/samples
+        cr_file: ${CR_FILE:-"nfs_v1alpha1_server.yaml"}
         operator_image: "{{ lookup('env', 'OPERATOR_IMAGE') | default('',true) }}"
         operator_pull_policy: ${OPERATOR_PULL_POLICY:-"Always"}
         kustomize: ${KUSTOMIZE_PATH:-kustomize}
