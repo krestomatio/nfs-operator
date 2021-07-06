@@ -13,6 +13,7 @@
 
 ### Code Refactoring
 
+* separate rook installation (Job Céspedes Ortiz)
 * rename role name and remove routine play (Job Céspedes Ortiz)
 * fix github templates (Job Céspedes Ortiz)
 
@@ -22,6 +23,8 @@
 
 ### Chores
 
+* update README.md (Job Céspedes Ortiz)
+* release: 0.0.1 (krestomatio-cibot)
 * add docs (Job Céspedes Ortiz)
 * add LICENSE (Job Céspedes Ortiz)
 * add server api (Job Céspedes Ortiz)
