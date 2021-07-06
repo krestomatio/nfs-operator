@@ -1,8 +1,0 @@
-# Install nfs provider operator with rook nfs server permissions
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-bases:
-- ../default
-resources:
-- rook/operator/
-- rook/operator/server/
