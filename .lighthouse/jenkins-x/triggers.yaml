@@ -12,6 +12,7 @@ spec:
   - name: lint
     context: "lint"
     always_run: true
+    require_run: true
     trigger: (?m)^/test( all| lint),?(s+|$)
     rerun_command: /test lint
     source: "pullrequest.yaml"
