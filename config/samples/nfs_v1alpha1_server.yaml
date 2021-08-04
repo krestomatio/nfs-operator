@@ -1,6 +1,7 @@
 apiVersion: nfs.krestomat.io/v1alpha1
 kind: Server
 metadata:
+  # name should be less than 56 characters
   name: server-sample
 spec:
   # Ownership/permissions
@@ -20,7 +21,7 @@ spec:
   server_pvc_autoexpansion: true
   ## Every time autoexpansion is required, increment 5 GiB
   server_pvc_autoexpansion_gib: 5
-  ### But no more than 250 GiB
+  ## But no more than 250 GiB
   server_pvc_autoexpansion_cap_gib: 250
 
   # Other
