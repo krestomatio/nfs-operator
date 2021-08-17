@@ -2,7 +2,7 @@ CONTAINER_BUILDER ?= docker
 OPERATOR_NAME ?= nfs-operator
 REPO_NAME ?= nfs-operator
 REPO_OWNER ?= krestomatio
-VERSION ?= 0.0.12
+VERSION ?= 0.0.13
 
 # Image
 REGISTRY ?= quay.io
