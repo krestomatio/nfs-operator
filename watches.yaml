@@ -4,11 +4,6 @@
   group: nfs.krestomat.io
   kind: Server
   reconcilePeriod: 1m
-  vars:
-    cr_version: v1alpha1
-    cr_group: nfs.krestomat.io
-    cr_api_version: "nfs.krestomat.io/v1alpha1"
-    cr_kind: Server
   finalizer:
     name: nfs.krestomat.io/finalizer
     vars:
