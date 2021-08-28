@@ -6,6 +6,11 @@ driver:
 lint: |
   set -e
   yamllint -d "{extends: relaxed, rules: {line-length: {max: 120}}}" .
+  if [ -d roles ]; then
+    yamllint roles/*
+    ansible-lint roles/*
+    flake8 roles/*
+  fi
 platforms:
   - name: cluster
     groups:
@@ -21,7 +26,7 @@ provisioner:
   inventory:
     group_vars:
       all:
-        namespace: ${TEST_OPERATOR_NAMESPACE:-osdk-test}
+        namespace: ${TEST_OPERATOR_NAMESPACE:-nfs-test}
     host_vars:
       localhost:
         ansible_python_interpreter: '{{ ansible_playbook_python }}'
@@ -35,8 +40,3 @@ provisioner:
   env:
     K8S_AUTH_KUBECONFIG: ${MOLECULE_EPHEMERAL_DIRECTORY}/kubeconfig
     KUBECONFIG: ${MOLECULE_EPHEMERAL_DIRECTORY}/kubeconfig
-verifier:
-  name: ansible
-  lint: |
-    set -e
-    ansible-lint
