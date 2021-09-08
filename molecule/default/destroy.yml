@@ -39,3 +39,8 @@
       command: '{{ kustomize }} edit set namespace nfs-test'
       args:
         chdir: '{{ item }}'
+
+    - name: Unset testing nameprefix
+      command: '{{ kustomize }} edit set nameprefix nfs-'
+      args:
+        chdir: '{{ config_dir }}/testing'
