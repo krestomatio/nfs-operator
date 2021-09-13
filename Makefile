@@ -3,7 +3,7 @@ OPERATOR_SHORTNAME ?= nfs
 OPERATOR_NAME ?= $(OPERATOR_SHORTNAME)-operator
 REPO_NAME ?= $(OPERATOR_SHORTNAME)-operator
 REPO_OWNER ?= krestomatio
-VERSION ?= 0.0.17
+VERSION ?= 0.0.18
 
 # Image
 REGISTRY ?= quay.io
