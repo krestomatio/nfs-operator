@@ -1,4 +1,5 @@
 ## Append samples you want in your CSV to this file as resources ##
 resources:
 - nfs_v1alpha1_server.yaml
+- nfs_v1alpha1_routine.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

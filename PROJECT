@@ -13,4 +13,11 @@ resources:
   group: nfs
   kind: Server
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: krestomat.io
+  group: nfs
+  kind: Routine
+  version: v1alpha1
 version: "3"
