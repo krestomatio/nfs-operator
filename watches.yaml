@@ -3,7 +3,6 @@
 - version: v1alpha1
   group: nfs.krestomat.io
   kind: Server
-  watchDependentResources: false
   finalizer:
     name: nfs.krestomat.io/finalizer
     vars:
