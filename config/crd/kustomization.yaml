@@ -3,4 +3,5 @@
 # It should be run by config/default
 resources:
 - bases/nfs.krestomat.io_servers.yaml
+- bases/nfs.krestomat.io_routines.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
