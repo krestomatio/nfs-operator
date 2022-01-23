@@ -1,6 +1,6 @@
 OPERATOR_SHORTNAME ?= nfs
 VERSION ?= 0.0.33
-COLLECTION_VERSION ?= 0.0.52
+COLLECTION_VERSION ?= 0.0.53
 OPERATOR_TYPE ?= ansible
 
 include hack/mk/main.mk
