@@ -1,5 +1,3 @@
-> The Kubernetes Operator in this project is in **Alpha** version. **Use at your own risk**
-
 [NFS Operator](https://github.com/krestomatio/nfs-operator) adds three important features for a NFS in Kubernetes. It allows setting NFS export [ownership/permissions](#ownershippermissions), enables PVC [autoexpansion](#autoexpansion) and reduces the number of manual [resource definitions](#storageclass). It is based on [Rook NFS v1.7](https://github.com/rook/nfs/blob/release-1.7/Documentation/README.md) and [Ansible Operator SDK](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/). Thus, the new features are in addition to those in Rook NFS. The extra functions it adds on top of Rook NFS are:
 
 1. It is able to set ownership and permissions for the (NFS) Server export
@@ -13,6 +11,9 @@ There are some restrictions compared to Rook NFS:
 Prerequisites are the same as [Rook NFS](https://github.com/rook/nfs/blob/release-1.7/Documentation/quickstart.md#prerequisites). Therefore, **Rook NFS v1.7 must be installed**.
 
 ## Install
+
+> The Kubernetes Operator in this project is in **Alpha** version. **Use at your own risk**
+
 Follow the next steps to install the NFS Operator as well as Rook NFS v1.7 operator. Notice that CRs should be installed in the namesapace **rook-nfs**. It is the default namespace for (NFS) Servers in Rook NFS Operator installation:
 ```bash
 # install rook nfs operator v1.7
@@ -21,7 +22,7 @@ make deploy-rook
 # install this operator
 make deploy
 
-# add a nfs server cr/object
+# create a nfs server cr/object from sample
 kubectl -n rook-nfs apply -f config/samples/nfs_v1alpha1_server.yaml
 
 # follow/check nfs operator logs
