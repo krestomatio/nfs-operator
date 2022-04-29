@@ -1,35 +1,32 @@
-[NFS Operator](https://github.com/krestomatio/nfs-operator) adds three important features for a NFS in Kubernetes. It allows setting NFS export [ownership/permissions](#ownershippermissions), enables PVC [autoexpansion](#autoexpansion) and reduces the number of manual [resource definitions](#storageclass). It is based on [Rook NFS v1.7](https://github.com/rook/nfs/blob/release-1.7/Documentation/README.md) and [Ansible Operator SDK](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/). Thus, the new features are in addition to those in Rook NFS. The extra functions it adds on top of Rook NFS are:
+[NFS Operator](https://github.com/krestomatio/nfs-operator) creates NFSv4 Ganesha servers in Kubernetes, allowing to set [ownership/permissions](#ownershippermissions) of their NFS export directory; to [autoexpand their PVC](#autoexpansion); and to enable [RWX storage](#rwx-storage) from them:
 
-1. It is able to set ownership and permissions for the (NFS) Server export
-2. It is able to autoexpand/adjust the value of (NFS) Server PVC storage size
-3. It automatically creates a StorageClass with a (NFS) Server
+1. It can set ownership and permissions for [export parent directory](#ownershippermissions) of the (NFS) Server.
+2. It is able to [expand/adjust](#autoexpansion) the PVC size of the (NFS) Server automatically, as it grows.
+3. It could autocreate additional resources like PersistenVolume (Static) or StorageClass(Dynamic) that uses the (NFS) Server for [RWX storage](#rwx-storage).
 
-There are some restrictions compared to Rook NFS:
-* Only one export/PVC per (NFS) Server
+>It is based on [Ansible Operator SDK](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/).
 
-## Prerequisites
-Prerequisites are the same as [Rook NFS](https://github.com/rook/nfs/blob/release-1.7/Documentation/quickstart.md#prerequisites). Therefore, **Rook NFS v1.7 must be installed**.
+## Dependencies
+> A previous version had NFS Rook as a dependency. However, it is no longer the case
+* [NFS CSI](https://github.com/kubernetes-csi/csi-driver-nfs) driver `version >= v3.0.0` for dynamic provisioning
 
 ## Install
 
 > The Kubernetes Operator in this project is in **Alpha** version. **Use at your own risk**
 
-Follow the next steps to install the NFS Operator as well as Rook NFS v1.7 operator. Notice that CRs should be installed in the namesapace **rook-nfs**. It is the default namespace for (NFS) Servers in Rook NFS Operator installation:
+Follow the next steps to install the NFS Operator:
 ```bash
-# install rook nfs operator v1.7
-make deploy-rook
-
 # install this operator
 make deploy
 
 # create a nfs server cr/object from sample
-kubectl -n rook-nfs apply -f config/samples/nfs_v1alpha1_server.yaml
+kubectl apply -f config/samples/nfs_v1alpha1_server.yaml
 
 # follow/check nfs operator logs
 kubectl -n nfs-operator-system logs -l control-plane=controller-manager -c manager  -f
 
 # follow sample nfs server cr/object status
-kubectl -n rook-nfs get Server server-sample -o yaml -w
+kubectl get Server server-sample -o yaml -w
 ```
 
 ## Uninstall
@@ -37,17 +34,14 @@ Follow the next steps to uninstall it.
 ```bash
 # delete the nfs server cr/object
 # CAUTION with data loss
-kubectl -n rook-nfs delete -f config/samples/nfs_v1alpha1_server.yaml
+kubectl delete -f config/samples/nfs_v1alpha1_server.yaml
 
 # uninstall this operator
 make undeploy
-
-# uninstall rook nfs operator v1.7
-make undeploy-rook
 ```
 
 ## Configuration Options
-For a CRD sample, see: [sample](config/samples/nfs_v1alpha1_server.yaml)
+For a Custom Resource (CR) sample of a (NFS) Server, see: [sample](config/samples/nfs_v1alpha1_server.yaml)
 
 ### Ownership/Permissions
 To set export folder ownership, set _server_export_userid_ and _server_export_groupid_. For export folder permissions, set _server_export_permissions_. For instance:
@@ -80,8 +74,10 @@ spec:
 * Kubernetes cluster and (NFS) Server PVC must support expansion of volumes
 * In older K8s versions, (NFS) Server pod may be restart when autoexpansion is enabled if Kubernetes feature gate _ExpandInUsePersistentVolumes_ is false. See: Kubernetes [Feature Gates](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/)
 
-### StorageClass
-A class is automatically created with suffix **-nfs-sc**. If a CR is created with the name: [**server-sample**](config/samples/nfs_v1alpha1_server.yaml), a storage class named **server-sample-nfs-sc** is also created and showed in the CR status.
+### RWX Storage
+`PersistenVolume` or `StorageClass` autocreation could be specified in the (NFS) Server CR. They are mutually exclusive. Only one of those two resurces could be set for autocreation. The default is none.
+
+Names for `PersistenVolume` and `StorageClass` are generated using (NFS) Server CR name + suffix **-nfs-pv** and suffix **-nfs-sc** respectively. For example: if a CR is created with the name: [**server-sample**](config/samples/nfs_v1alpha1_server.yaml), a storage class named **server-sample-nfs-sc** is also created and showed in the CR status.
 
 ### Advanced Options
 For advanced configuration options available for CR spec, take a look at [the options](https://github.com/krestomatio/ansible-collection-k8s/blob/master/roles/v1alpha1/nfs/server/defaults/main/server.yml)

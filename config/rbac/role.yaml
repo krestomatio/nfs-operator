@@ -52,33 +52,6 @@ rules:
       - update
       - watch
   ##
-  ## Rules for nfs rook
-  ##
-  - apiGroups:
-      - storage.k8s.io
-    resources:
-      - storageclasses
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  - apiGroups:
-      - nfs.rook.io
-    resources:
-      - nfsservers
-    verbs:
-      - create
-      - delete
-      - get
-      - list
-      - patch
-      - update
-      - watch
-  ##
   ## Rules for nfs.krestomat.io/v1alpha1, Kind: Routine
   ##
   - apiGroups:
