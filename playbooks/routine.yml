@@ -1,11 +1,9 @@
-- name: nfs server routine
+- name: (nfs) server routine
   hosts: localhost
   gather_facts: false
   collections:
     - kubernetes.core
     - operator_sdk.util
   tasks:
-    - name: import nfs server routine
-      import_role:
-        name: krestomatio.k8s.v1alpha1.nfs.server
-        tasks_from: routine.yml
+    - import_role:
+        name: krestomatio.k8s.v1alpha1.nfs.routine

@@ -35,19 +35,42 @@ spec:
             x-kubernetes-preserve-unknown-fields: true
           status:
             description: Status defines the observed state of Server
+            properties:
+              serverExportMode:
+                description: Server export directory mode
+                maxLength: 4
+                minLength: 3
+                type: string
+              server_export_mode:
+                description: Server export directory mode
+                maxLength: 4
+                minLength: 3
+                type: string
             type: object
             x-kubernetes-preserve-unknown-fields: true
         type: object
     additionalPrinterColumns:
+    - description: Age of the resource
+      jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
     - description: Site status such as Unknown/SettingUp/Ready/Failed/Terminating
         etc
       jsonPath: .status.state
       name: STATUS
       type: string
-    - description: Age of the resource
-      jsonPath: .metadata.creationTimestamp
-      name: AGE
+    - description: Time of latest transition
+      jsonPath: .status.conditions[?(@.type=="Failure")].lastTransitionTime
+      name: SINCE
       type: date
+    - description: Generated storage class name
+      jsonPath: .status.storageClass
+      name: STORAGECLASS
+      type: string
+    - description: Generated service name
+      jsonPath: .status.service
+      name: SERVICE
+      type: string
     served: true
     storage: true
     subresources:

@@ -2,7 +2,7 @@
 
 1. It can set ownership and permissions for [export parent directory](#ownershippermissions) of the (NFS) Server.
 2. It is able to [expand/adjust](#autoexpansion) the PVC size of the (NFS) Server automatically, as it grows.
-3. It could autocreate additional resources like PersistenVolume (Static) or StorageClass(Dynamic) that uses the (NFS) Server for [RWX storage](#rwx-storage).
+3. It could autogenerate an StorageClass that uses the (NFS) Server for [RWX storage](#rwx-storage).
 
 >It is based on [Ansible Operator SDK](https://sdk.operatorframework.io/docs/building-operators/ansible/tutorial/).
 
@@ -57,14 +57,14 @@ spec:
 ```
 
 ### Autoexpansion
-When autoexpansion is enabled (_server_pvc_autoexpansion_), if storage available is less than 20% or below _server_pvc_autoexpansion_gib_, PVC storage size is auto incremented according to _server_pvc_autoexpansion_gib_. However, it will not be increment beyond _server_pvc_autoexpansion_cap_gib_ (see related [function](https://github.com/krestomatio/ansible-collection-k8s/blob/c8768df3d9af4ddf7258c31d37cc3f54cc5a4cf6/plugins/module_utils/storage.py#L62)). The following is a config example for it:
+When autoexpansion is enabled (_server_pvc_autoexpansion_), if storage available is less than 20% or below _server_pvc_autoexpansion_increment_gib_, PVC storage size is auto incremented according to _server_pvc_autoexpansion_increment_gib_. However, it will not be increment beyond _server_pvc_autoexpansion_cap_gib_ (see related [function](https://github.com/krestomatio/ansible-collection-k8s/blob/c8768df3d9af4ddf7258c31d37cc3f54cc5a4cf6/plugins/module_utils/storage.py#L62)). The following is a config example for it:
 ```yaml
 spec:
   # Autoexpansion
   ## Enable autoexpansion
   server_pvc_autoexpansion: true
   ## Every time autoexpansion is required, increment 5 GiB
-  server_pvc_autoexpansion_gib: 5
+  server_pvc_autoexpansion_increment_gib: 5
   ### But no more than 250 GiB
   server_pvc_autoexpansion_cap_gib: 250
 ```
@@ -75,9 +75,9 @@ spec:
 * In older K8s versions, (NFS) Server pod may be restart when autoexpansion is enabled if Kubernetes feature gate _ExpandInUsePersistentVolumes_ is false. See: Kubernetes [Feature Gates](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/)
 
 ### RWX Storage
-`PersistenVolume` or `StorageClass` autocreation could be specified in the (NFS) Server CR. They are mutually exclusive. Only one of those two resurces could be set for autocreation. The default is none.
+`StorageClass` (SC) autocreation could be specified in the (NFS) Server CR. The default is to generate one SC.
 
-Names for `PersistenVolume` and `StorageClass` are generated using (NFS) Server CR name + suffix **-nfs-pv** and suffix **-nfs-sc** respectively. For example: if a CR is created with the name: [**server-sample**](config/samples/nfs_v1alpha1_server.yaml), a storage class named **server-sample-nfs-sc** is also created and showed in the CR status.
+SC default name is defined using (NFS) Server CR name + suffix **-nfs-sc**. For example: if a CR is created with the name: [**server-sample**](config/samples/nfs_v1alpha1_server.yaml), a storage class named **server-sample-sc** is also created and showed in the CR status.
 
 ### Advanced Options
 For advanced configuration options available for CR spec, take a look at [the options](https://github.com/krestomatio/ansible-collection-k8s/blob/master/roles/v1alpha1/nfs/server/defaults/main/server.yml)

@@ -1,6 +1,6 @@
----
-- hosts: localhost
-  gather_facts: no
+- name: (nfs) server k8s resources
+  hosts: localhost
+  gather_facts: false
   collections:
     - kubernetes.core
     - operator_sdk.util

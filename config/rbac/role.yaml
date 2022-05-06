@@ -10,12 +10,12 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - secrets
       - configmaps
       - pods
       - pods/exec
       - pods/log
       - persistentvolumeclaims
+      - services
     verbs:
       - create
       - delete
@@ -29,6 +29,20 @@ rules:
     resources:
       - statefulsets
     verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - storage.k8s.io
+    resources:
+      - storageclasses
+    verbs:
+      - create
+      - delete
       - get
       - list
       - patch

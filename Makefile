@@ -1,6 +1,7 @@
-OPERATOR_SHORTNAME ?= nfs
+PROJECT_SHORTNAME ?= nfs
 VERSION ?= 0.0.64
 COLLECTION_VERSION ?= 0.0.90
 OPERATOR_TYPE ?= ansible
+PROJECT_TYPE ?= $(OPERATOR_TYPE)-operator
 
 include hack/mk/main.mk
