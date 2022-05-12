@@ -60,14 +60,14 @@ spec:
       name: STATUS
       type: string
     - description: Time of latest transition
-      jsonPath: .status.conditions[?(@.type=="Failure")].lastTransitionTime
+      jsonPath: .status.conditions[?(@.type=='Ready')].lastTransitionTime
       name: SINCE
       type: date
     - description: Generated storage class name
       jsonPath: .status.storageClass
       name: STORAGECLASS
       type: string
-    - description: Generated service name
+    - description: Generated service name to access CR
       jsonPath: .status.service
       name: SERVICE
       type: string
