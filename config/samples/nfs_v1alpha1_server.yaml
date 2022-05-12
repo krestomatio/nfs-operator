@@ -1,3 +1,5 @@
+### camelCase
+---
 apiVersion: nfs.krestomat.io/v1alpha1
 kind: Server
 metadata:
@@ -6,28 +8,28 @@ metadata:
 spec:
   # Ownership/permissions
   ## Set export folder userid to 0
-  server_export_userid: 0
+  serverExportUserid: 0
   ## Set export folder groupid to 0
-  server_export_groupid: 0
+  serverExportGroupid: 0
   ## Set export folder permissions to '0700'
-  server_export_mode: '0700'
+  serverExportMode: '0700'
 
-  # Autoexpansion: if storage available is less than 20% or 'server_pvc_autoexpansion_increment_gib', adjust PVC storage size according to 'server_pvc_autoexpansion_increment_gib' and 'server_pvc_autoexpansion_cap_gib':
+  # Autoexpansion: if storage available is less than 20% or 'serverPvcAutoexpansionIncrementGib', adjust PVC storage size according to 'serverPvcAutoexpansionIncrementGib' and 'serverPvcAutoexpansionCapGib':
   # * Kubernetes cluster and (NFS) Server PVC must support expansion of volumes
   # * In older version, (NFS) Server pod may be restart when autoexpanding if Kubernetes feature gate
   #   'ExpandInUsePersistentVolumes' is false. See:
   #   https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
   ## Enable autoexpansion
-  server_pvc_autoexpansion: true
+  serverPvcAutoexpansion: true
   ## Initial pvc size
-  server_pvc_autoexpansion_init_size_gib: 1
+  serverPvcAutoexpansionInitSizeGib: 1
   ## Every time autoexpansion is required, increment 5 GiB
-  server_pvc_autoexpansion_increment_gib: 5
+  serverPvcAutoexpansionIncrementGib: 5
   ## But no more than 250 GiB
-  server_pvc_autoexpansion_cap_gib: 250
+  serverPvcAutoexpansionCapGib: 250
 
   ## Storage class name to be used by this (NFS) Server
-  # server_pvc_data_storage_class_name: standard
+  # serverPvcDataStorageClassName: standard
 
   # Debug
-  # server_conf_log_level: DEBUG
+  # serverConfLogLevel: DEBUG
