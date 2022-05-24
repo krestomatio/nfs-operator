@@ -15,18 +15,16 @@ spec:
   serverExportMode: '0700'
 
   # Autoexpansion: if storage available is less than 20% or 'serverPvcAutoexpansionIncrementGib', adjust PVC storage size according to 'serverPvcAutoexpansionIncrementGib' and 'serverPvcAutoexpansionCapGib':
-  # * Kubernetes cluster and (NFS) Server PVC must support expansion of volumes
-  # * In older version, (NFS) Server pod may be restart when autoexpanding if Kubernetes feature gate
+  # * Kubernetes cluster and PVC must support expansion of volumes
+  # * In older cluster versions, pods require restart when autoexpanding if Kubernetes feature gate
   #   'ExpandInUsePersistentVolumes' is false. See:
   #   https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
   ## Enable autoexpansion
   serverPvcAutoexpansion: true
-  ## Initial pvc size
-  serverPvcAutoexpansionInitSizeGib: 1
   ## Every time autoexpansion is required, increment 5 GiB
   serverPvcAutoexpansionIncrementGib: 5
-  ## But no more than 250 GiB
-  serverPvcAutoexpansionCapGib: 250
+  ## But no more than 25 GiB
+  serverPvcAutoexpansionCapGib: 25
 
   ## Storage class name to be used by this (NFS) Server
   # serverPvcDataStorageClassName: standard

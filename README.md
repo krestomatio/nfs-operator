@@ -44,34 +44,34 @@ make undeploy
 For a Custom Resource (CR) sample of a (NFS) Server, see: [sample](config/samples/nfs_v1alpha1_server.yaml)
 
 ### Ownership/Permissions
-To set export folder ownership, set _server_export_userid_ and _server_export_groupid_. For export folder permissions, set _server_export_permissions_. For instance:
+To set export folder ownership, set _serverExportUserid_ and _serverExportGroupid_. For export folder permissions, set _serverExportMode_. For instance:
 ```yaml
 spec:
   # Ownership/permissions
   ## Set export folder userid to 48
-  server_export_userid: 48
+  serverExportUserid: 48
   ## Set export folder groupid to 0
-  server_export_groupid: 0
+  serverExportGroupid: 0
   ## Set export folder permissions to 775
-  server_export_permissions: 755
+  serverExportMode: 755
 ```
 
 ### Autoexpansion
-When autoexpansion is enabled (_server_pvc_autoexpansion_), if storage available is less than 20% or below _server_pvc_autoexpansion_increment_gib_, PVC storage size is auto incremented according to _server_pvc_autoexpansion_increment_gib_. However, it will not be increment beyond _server_pvc_autoexpansion_cap_gib_ (see related [function](https://github.com/krestomatio/ansible-collection-k8s/blob/c8768df3d9af4ddf7258c31d37cc3f54cc5a4cf6/plugins/module_utils/storage.py#L62)). The following is a config example for it:
+When autoexpansion is enabled (_serverPvcAutoexpansion_), if storage available is less than 20% or below _serverPvcAutoexpansionIncrementGib_, PVC storage size is auto incremented according to _serverPvcAutoexpansionIncrementGib_. However, it will not be increment beyond _serverPvcAutoexpansionCapGib_ (see related [function](https://github.com/krestomatio/ansible-collection-k8s/blob/c8768df3d9af4ddf7258c31d37cc3f54cc5a4cf6/plugins/module_utils/storage.py#L62)). The following is a config example for it:
 ```yaml
 spec:
   # Autoexpansion
   ## Enable autoexpansion
-  server_pvc_autoexpansion: true
+  serverPvcAutoexpansion: true
   ## Every time autoexpansion is required, increment 5 GiB
-  server_pvc_autoexpansion_increment_gib: 5
-  ### But no more than 250 GiB
-  server_pvc_autoexpansion_cap_gib: 250
+  serverPvcAutoexpansionIncrementGib: 5
+  ### But no more than 25 GiB
+  serverPvcAutoexpansionCapGib: 25
 ```
 
 #### Please, you should take into consideration the following:
 * Not all types of storage are compatible. For instance, hostpath is not.
-* Kubernetes cluster and (NFS) Server PVC must support expansion of volumes
+* Kubernetes cluster and PVC must support expansion of volumes
 * In older K8s versions, (NFS) Server pod may be restart when autoexpansion is enabled if Kubernetes feature gate _ExpandInUsePersistentVolumes_ is false. See: Kubernetes [Feature Gates](https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/)
 
 ### RWX Storage
