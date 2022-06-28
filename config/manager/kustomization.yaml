@@ -18,4 +18,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/krestomatio/nfs-operator
-  newTag: 0.1.8
+  newTag: 0.1.9
