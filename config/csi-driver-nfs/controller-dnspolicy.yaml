@@ -1,0 +1,10 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: csi-nfs-controller
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      dnsPolicy: ClusterFirstWithHostNet
