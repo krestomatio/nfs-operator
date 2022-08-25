@@ -12,7 +12,6 @@
 - version: v1alpha1
   group: nfs.krestomat.io
   kind: Routine
-  watchDependentResources: false
   reconcilePeriod: 1m
   playbook: playbooks/routine.yml
   vars:
