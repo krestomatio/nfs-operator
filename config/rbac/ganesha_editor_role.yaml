@@ -1,13 +1,13 @@
-# permissions for end users to edit servers.
+# permissions for end users to edit ganeshas.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: server-editor-role
+  name: ganesha-editor-role
 rules:
 - apiGroups:
   - nfs.krestomat.io
   resources:
-  - servers
+  - ganeshas
   verbs:
   - create
   - delete
@@ -19,6 +19,6 @@ rules:
 - apiGroups:
   - nfs.krestomat.io
   resources:
-  - servers/status
+  - ganeshas/status
   verbs:
   - get

@@ -11,7 +11,7 @@ resources:
     namespaced: true
   domain: krestomat.io
   group: nfs
-  kind: Server
+  kind: Ganesha
   version: v1alpha1
 - api:
     crdVersion: v1

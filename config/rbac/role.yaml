@@ -49,14 +49,14 @@ rules:
       - update
       - watch
   ##
-  ## Rules for nfs.krestomat.io/v1alpha1, Kind: Server
+  ## Rules for nfs.krestomat.io/v1alpha1, Kind: Ganesha
   ##
   - apiGroups:
       - nfs.krestomat.io
     resources:
-      - servers
-      - servers/status
-      - servers/finalizers
+      - ganeshas
+      - ganeshas/status
+      - ganeshas/finalizers
     verbs:
       - create
       - delete

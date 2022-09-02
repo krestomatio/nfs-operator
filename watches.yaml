@@ -2,12 +2,12 @@
 # Use the 'create api' subcommand to add watches to this file.
 - version: v1alpha1
   group: nfs.krestomat.io
-  kind: Server
+  kind: Ganesha
   finalizer:
     name: nfs.krestomat.io/finalizer
     vars:
       cr_state: absent
-  playbook: playbooks/server.yml
+  playbook: playbooks/ganesha.yml
 
 - version: v1alpha1
   group: nfs.krestomat.io

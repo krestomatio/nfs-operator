@@ -1,33 +1,33 @@
 ### camelCase
 ---
 apiVersion: nfs.krestomat.io/v1alpha1
-kind: Server
+kind: Ganesha
 metadata:
   # name should be less than 56 characters
-  name: server-sample
+  name: ganesha-sample
 spec:
   # Ownership/permissions
   ## Set export folder userid to 0
-  serverExportUserid: 0
+  ganeshaExportUserid: 0
   ## Set export folder groupid to 0
-  serverExportGroupid: 0
+  ganeshaExportGroupid: 0
   ## Set export folder permissions to '0700'
-  serverExportMode: '0700'
+  ganeshaExportMode: '0700'
 
-  # Autoexpansion: if storage available is less than 20% or 'serverPvcAutoexpansionIncrementGib', adjust PVC storage size according to 'serverPvcAutoexpansionIncrementGib' and 'serverPvcAutoexpansionCapGib':
+  # Autoexpansion: if storage available is less than 20% or 'ganeshaPvcAutoexpansionIncrementGib', adjust PVC storage size according to 'ganeshaPvcAutoexpansionIncrementGib' and 'ganeshaPvcAutoexpansionCapGib':
   # * Kubernetes cluster and PVC must support expansion of volumes
   # * In older cluster versions, pods require restart when autoexpanding if Kubernetes feature gate
   #   'ExpandInUsePersistentVolumes' is false. See:
   #   https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/
   ## Enable autoexpansion
-  serverPvcAutoexpansion: true
+  ganeshaPvcAutoexpansion: true
   ## Every time autoexpansion is required, increment 5 GiB
-  serverPvcAutoexpansionIncrementGib: 5
+  ganeshaPvcAutoexpansionIncrementGib: 5
   ## But no more than 25 GiB
-  serverPvcAutoexpansionCapGib: 25
+  ganeshaPvcAutoexpansionCapGib: 25
 
-  ## Storage class name to be used by this (NFS) Server
-  # serverPvcDataStorageClassName: standard
+  ## Storage class name to be used by this (NFS) Ganesha server
+  # ganeshaPvcDataStorageClassName: standard
 
   # Debug
-  # serverConfLogLevel: DEBUG
+  # ganeshaConfLogLevel: DEBUG
