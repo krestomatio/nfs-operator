@@ -1,4 +1,4 @@
-- name: (nfs) server k8s resources
+- name: (nfs) Ganesha server k8s resources
   hosts: localhost
   gather_facts: false
   collections:
@@ -6,4 +6,4 @@
     - operator_sdk.util
   tasks:
     - import_role:
-        name: krestomatio.k8s.v1alpha1.nfs.server
+        name: krestomatio.k8s.v1alpha1.nfs.ganesha
