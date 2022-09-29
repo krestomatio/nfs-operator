@@ -57,16 +57,16 @@ spec:
 ```
 
 ### Autoexpansion
-When autoexpansion is enabled (_ganeshaPvcAutoexpansion_), if storage available is less than 20% or below _ganeshaPvcAutoexpansionIncrementGib_, PVC storage size is auto incremented according to _ganeshaPvcAutoexpansionIncrementGib_. However, it will not be increment beyond _ganeshaPvcAutoexpansionCapGib_ (see related [function](https://github.com/krestomatio/ansible-collection-k8s/blob/c8768df3d9af4ddf7258c31d37cc3f54cc5a4cf6/plugins/module_utils/storage.py#L62)). The following is a config example for it:
+When autoexpansion is enabled (_ganeshaPvcDataAutoexpansion_), if storage available is less than 20% or below _ganeshaPvcDataAutoexpansionIncrementGib_, PVC storage size is auto incremented according to _ganeshaPvcDataAutoexpansionIncrementGib_. However, it will not be increment beyond _ganeshaPvcDataAutoexpansionCapGib_ (see related [function](https://github.com/krestomatio/ansible-collection-k8s/blob/c8768df3d9af4ddf7258c31d37cc3f54cc5a4cf6/plugins/module_utils/storage.py#L62)). The following is a config example for it:
 ```yaml
 spec:
   # Autoexpansion
   ## Enable autoexpansion
-  ganeshaPvcAutoexpansion: true
+  ganeshaPvcDataAutoexpansion: true
   ## Every time autoexpansion is required, increment 5 GiB
-  ganeshaPvcAutoexpansionIncrementGib: 5
+  ganeshaPvcDataAutoexpansionIncrementGib: 5
   ### But no more than 25 GiB
-  ganeshaPvcAutoexpansionCapGib: 25
+  ganeshaPvcDataAutoexpansionCapGib: 25
 ```
 
 #### Please, you should take into consideration the following:
