@@ -9,7 +9,6 @@ configMapGenerator:
   - controller_manager_config.yaml
   name: manager-config
 
-patchesStrategicMerge:
 # - enable_turbo_patch.yaml
 # - profile_tasks_patch.yaml
 
@@ -18,4 +17,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: quay.io/krestomatio/nfs-operator
-  newTag: 0.3.4
+  newTag: 0.3.5
