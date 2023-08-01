@@ -3,6 +3,21 @@
 - version: v1alpha1
   group: nfs.krestomat.io
   kind: Ganesha
+  blacklist:
+    # issue seing other secrets as dependant resources and triggering reconciliation (at least in logs)
+    - group: ""
+      version: v1
+      kind: Secret
+    # issue seing other config maps as dependant resources and triggering reconciliation (at least in logs)
+    - group: ""
+      version: v1
+      kind: ConfigMap
+    - group: "autoscaling"
+      version: v2
+      kind: HorizontalPodAutoscaler
+    - group: "autoscaling.k8s.io"
+      version: v1
+      kind: VerticalPodAutoscaler
   finalizer:
     name: nfs.krestomat.io/finalizer
     vars:
