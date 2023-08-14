@@ -29,5 +29,9 @@ spec:
   ## Storage class name to be used by this (NFS) Ganesha server
   # ganeshaPvcDataStorageClassName: standard
 
+  ## Generate storage class
+  # generate a storage class with this NFS storage as source
+  ganeshaGeneratedNfsScNeeded: true
+
   # Debug
   # ganeshaConfLogLevel: DEBUG
