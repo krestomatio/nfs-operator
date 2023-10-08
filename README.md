@@ -85,3 +85,6 @@ For advanced configuration options available for CR spec, take a look at [the op
 ## Want to contribute?
 * Use [Github issues](https://github.com/krestomatio/nfs-operator/issues) to report bugs, send enhancement, new feature requests and questions
 * Join [our telegram group](https://t.me/nfs_operator)
+
+## [About Krestomatio](https://krestomatio.com/about)
+[Krestomatio is a managed service for Moodle™ e-learning platforms](https://krestomatio.com/). It allows you to have open-source instances managed by a service optimized for Moodle™, complete with an additional plugin pack and customization options.
