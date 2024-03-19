@@ -1,5 +1,5 @@
 ## Changes
 
-### Bug Fixes
+### Chores
 
-* set correct collection version (Job Céspedes Ortiz)
+* update: bump collection krestomatio.k8s 0.3.69 (krestomatio-cibot)
