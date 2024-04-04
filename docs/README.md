@@ -19,13 +19,13 @@ This operator simplifies deployment and management of NFSv4 Ganesha servers with
 1. **Install Operator:**
 ```bash
 # Ensure prerequisites are met
-kubectl apply -k https://github.com/krestomatio/nfs-operator/config/default?ref=v0.4.2
+kubectl apply -k https://github.com/krestomatio/nfs-operator/config/default?ref=v0.4.3
 ```
 
 2. **Configure NFS Instance:**
-- Download and modify [this sample](https://raw.githubusercontent.com/krestomatio/nfs-operator/v0.4.2/config/samples/nfs_v1alpha1_ganesha.yaml) file to reflect your specific instance. This file defines the desired configuration for your NFS Ganesha deployment.
+- Download and modify [this sample](https://raw.githubusercontent.com/krestomatio/nfs-operator/v0.4.3/config/samples/nfs_v1alpha1_ganesha.yaml) file to reflect your specific instance. This file defines the desired configuration for your NFS Ganesha deployment.
 ```bash
-curl -sSL 'https://raw.githubusercontent.com/krestomatio/nfs-operator/v0.4.2/config/samples/nfs_v1alpha1_ganesha.yaml' -o nfs_v1alpha1_ganesha.yaml
+curl -sSL 'https://raw.githubusercontent.com/krestomatio/nfs-operator/v0.4.3/config/samples/nfs_v1alpha1_ganesha.yaml' -o nfs_v1alpha1_ganesha.yaml
 # modify nfs_v1alpha1_ganesha.yaml
 ```
 
@@ -56,7 +56,7 @@ kubectl delete -f nfs_v1alpha1_ganesha.yaml
 
 2. **Uninstall Operator:**
 ```bash
-kubectl delete -k https://github.com/krestomatio/nfs-operator/config/default?ref=v0.4.2
+kubectl delete -k https://github.com/krestomatio/nfs-operator/config/default?ref=v0.4.3
 ```
 
 ## Configuration
