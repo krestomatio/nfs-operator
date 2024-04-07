@@ -10,6 +10,9 @@ spec:
     listKind: GaneshaList
     plural: ganeshas
     singular: ganesha
+    categories:
+    - lms
+    - nfs
   scope: Namespaced
   versions:
   - name: v1alpha1
