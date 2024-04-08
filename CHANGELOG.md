@@ -1,5 +1,5 @@
 ## Changes
 
-### Documentation
+### Bug Fixes
 
-* update operatorhub category (Job Céspedes Ortiz)
+* add test in bundle (Job Céspedes Ortiz)
