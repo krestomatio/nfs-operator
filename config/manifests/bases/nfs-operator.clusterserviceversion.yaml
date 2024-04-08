@@ -5,6 +5,7 @@ metadata:
     alm-examples: '[]'
     capabilities: Seamless Upgrades
     categories: Storage
+    containerImage: quay.io/krestomatio/nfs-operator
     description: |-
       This operator simplifies NFS Ganesha deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
