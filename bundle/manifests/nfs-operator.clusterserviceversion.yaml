@@ -4,8 +4,8 @@ metadata:
   annotations:
     alm-examples: '[]'
     capabilities: Seamless Upgrades
-    categories: Application Runtime
-    createdAt: "2024-04-07T22:55:51Z"
+    categories: Storage
+    createdAt: "2024-04-08T01:46:31Z"
     description: |-
       This operator simplifies NFS Ganesha deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
