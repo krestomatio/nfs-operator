@@ -21,7 +21,8 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: Storage
-    createdAt: "2024-04-08T02:27:25Z"
+    containerImage: quay.io/krestomatio/nfs-operator:0.4.6
+    createdAt: "2024-04-08T04:31:15Z"
     description: |-
       This operator simplifies NFS Ganesha deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
