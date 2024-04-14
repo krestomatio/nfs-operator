@@ -61,7 +61,7 @@ kubectl delete -k https://github.com/krestomatio/nfs-operator/config/default?ref
 
 ## Configuration
 
-NFS Ganesha custom resource (CR) can be configure via its spec field. NFS Ganesha CR spec supports all the the variables in [v1alpha1.nfs.ganesha ansible role](https://krestomatio.com/docs/krestomatio.k8s/roles/v1alpha1.nfs.ganesha/defaults/main/ganesha) as fields. These variables can be specified directly in the NFS CR YAML manifest file, allowing for customization of the Ganesha instance during deployment. Refer to the official [v1alpha1.nfs.ganesha ansible role documentation](https://krestomatio.com/docs/krestomatio.k8s/roles/v1alpha1.nfs.ganesha/) for a comprehensive list of supported fields.
+NFS Ganesha custom resource (CR) can be configure via its spec field. NFS Ganesha CR spec supports all the the variables in [v1alpha1.nfs.ganesha ansible role](https://krestomatio.com/docs/ansible-collection-k8s/roles/v1alpha1.nfs.ganesha/defaults/main/ganesha) as fields. These variables can be specified directly in the NFS CR YAML manifest file, allowing for customization of the Ganesha instance during deployment. Refer to the official [v1alpha1.nfs.ganesha ansible role documentation](https://krestomatio.com/docs/ansible-collection-k8s/roles/v1alpha1.nfs.ganesha/) for a comprehensive list of supported fields.
 
 ## Contributing
 
