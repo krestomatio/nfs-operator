@@ -40,3 +40,6 @@ spec:
 
   # Debug
   # ganeshaConfLogLevel: DEBUG
+
+  # Default NetworkPolicy
+  # ganeshaNetpolOmit: false

@@ -1,0 +1,6 @@
+# {{ ansible_managed  }}
+{% include 'nfs_v1alpha1_ganesha.yaml' %}
+
+{% if nfs_sample_extra_spec is defined and nfs_sample_extra_spec %}
+  {{ nfs_sample_extra_spec | indent(width=2) }}
+{% endif %}
