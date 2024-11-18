@@ -21,8 +21,8 @@ metadata:
       ]
     capabilities: Seamless Upgrades
     categories: Storage
-    containerImage: quay.io/krestomatio/nfs-operator:0.4.14
-    createdAt: "2024-05-19T18:09:33Z"
+    containerImage: quay.io/krestomatio/nfs-operator:0.4.15
+    createdAt: "2024-11-18T16:58:08Z"
     description: |-
       This operator simplifies NFS Ganesha deployments in Kubernetes by leveraging
       the Ansible Operator SDK for automation
@@ -33,7 +33,7 @@ metadata:
     operatorframework.io/arch.amd64: supported
     operatorframework.io/arch.arm64: supported
     operatorframework.io/os.linux: supported
-  name: nfs-operator.v0.4.14
+  name: nfs-operator.v0.4.15
   namespace: placeholder
 spec:
   apiservicedefinitions: {}
@@ -129,6 +129,18 @@ spec:
           - apps
           resources:
           - statefulsets
+          verbs:
+          - create
+          - delete
+          - get
+          - list
+          - patch
+          - update
+          - watch
+        - apiGroups:
+          - networking.k8s.io
+          resources:
+          - networkpolicies
           verbs:
           - create
           - delete
@@ -257,7 +269,7 @@ spec:
                 env:
                 - name: ANSIBLE_GATHERING
                   value: explicit
-                image: quay.io/krestomatio/nfs-operator:0.4.14
+                image: quay.io/krestomatio/nfs-operator:0.4.15
                 livenessProbe:
                   httpGet:
                     path: /healthz
@@ -352,4 +364,4 @@ spec:
   provider:
     name: Krestomatio
     url: https://krestomatio.com
-  version: 0.4.14
+  version: 0.4.15
