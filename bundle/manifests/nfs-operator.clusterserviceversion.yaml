@@ -216,12 +216,8 @@ spec:
         serviceAccountName: nfs-operator-controller-manager
       deployments:
       - label:
-          app.kubernetes.io/component: manager
-          app.kubernetes.io/created-by: nfs-operator
-          app.kubernetes.io/instance: controller-manager
           app.kubernetes.io/managed-by: kustomize
-          app.kubernetes.io/name: deployment
-          app.kubernetes.io/part-of: nfs-operator
+          app.kubernetes.io/name: nfs-operator
           control-plane: controller-manager
         name: nfs-operator-controller-manager
         spec:
