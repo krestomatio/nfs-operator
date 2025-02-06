@@ -4,4 +4,4 @@
 resources:
 - bases/nfs.krestomat.io_ganeshas.yaml
 - bases/nfs.krestomat.io_routines.yaml
-#+kubebuilder:scaffold:crdkustomizeresource
+# +kubebuilder:scaffold:crdkustomizeresource
